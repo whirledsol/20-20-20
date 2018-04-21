@@ -37,6 +37,7 @@ while True:
                     innerLoopMousePos = mouse.get_position()
                     # innerLoopMousePos = x, y = win32api.GetCursorPos()
                 else:
-                    print("X = {}, Y = {}".format(str(innerLoopMousePos[0]), str(innerLoopMousePos[1])))
+                    # print("X = {}, Y = {}".format(str(innerLoopMousePos[0]), str(innerLoopMousePos[1])))
+                    mouse.move(innerLoopMousePos[0], innerLoopMousePos[1])
 
         mainLoop_start_time = time.time()
