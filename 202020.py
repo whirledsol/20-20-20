@@ -22,6 +22,7 @@ while True:
         speech_engine.runAndWait()
 
         innerLoopTime = time.time()
+        innerLoopMousePos = None
 
         while True:
             innerLoopTime_2 = time.time()
@@ -32,7 +33,10 @@ while True:
                 speech_engine.runAndWait()
                 break
             else:
-                x, y = win32api.GetCursorPos()
-                print("Mouse is in position: X: {}, Y: {}".format(str(x), str(y)))
+                if innerLoopMousePos is None:
+                    innerLoopMousePos = mouse.get_position()
+                    # innerLoopMousePos = x, y = win32api.GetCursorPos()
+                else:
+                    print(innerLoopMousePos)
 
         mainLoop_start_time = time.time()
