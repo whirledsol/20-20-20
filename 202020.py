@@ -27,8 +27,12 @@ while True:
             innerLoopTime_2 = time.time()
             if round(innerLoopTime_2, 1) - round(innerLoopTime) == 8:
                 print(" [+] 20 seconds has passed!")
+                playsound.playsound("success.mp3")
+                speech_engine.say("20 seconds has passed. Good job.")
+                speech_engine.runAndWait()
                 break
             else:
-                print("Waiting 8 seconds...")
+                x, y = win32api.GetCursorPos()
+                print("Mouse is in position: X: {}, Y: {}".format(str(x), str(y)))
 
         mainLoop_start_time = time.time()
