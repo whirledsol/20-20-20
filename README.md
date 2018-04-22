@@ -7,4 +7,4 @@ I made this for personal use, and will start this application each time I start 
 which might benefit you, I encourage you to give it a go.
 
 ## What is this?
-A personal use program I am creating in order to follow the 20-20-20 rule and keep my eyes in line :)
+A personal use program I am creating in order to follow the 20-20-20 rule and keep my eyes a little more healthy
