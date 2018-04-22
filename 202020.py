@@ -17,7 +17,7 @@ print(" [+] The  tool has been started. Don't give up!")
 
 while True:
     mainLoop_while_time = time.time()
-    if round(mainLoop_while_time, 1) - round(mainLoop_start_time, 1) == 5:
+    if round(mainLoop_while_time, 1) - round(mainLoop_start_time, 1) == 1200:
         print(" [!] 20 minutes has passed!")
         playsound.playsound("alert.mp3")
         speech_engine.say("20 minutes has passed. Look at something 20 feet away, and do this for 20 seconds.")
