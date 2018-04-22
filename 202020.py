@@ -4,8 +4,10 @@ import time
 import keyboard
 import mouse
 import win32api
+import msvcrt
 import pyttsx3
 import playsound
+
 
 speech_engine = pyttsx3.init()
 speech_engine.setProperty("rate", 200)
@@ -21,8 +23,12 @@ while True:
         speech_engine.say("20 minutes has passed. Look at something 20 feet away, and do this for 20 seconds.")
         speech_engine.runAndWait()
 
+        KEYS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
         innerLoopTime = time.time()
         innerLoopMousePos = None
+        innerLoopKeyBlock = False
 
         while True:
             innerLoopTime_2 = time.time()
@@ -39,5 +45,12 @@ while True:
                 else:
                     # print("X = {}, Y = {}".format(str(innerLoopMousePos[0]), str(innerLoopMousePos[1])))
                     mouse.move(innerLoopMousePos[0], innerLoopMousePos[1])
+                    if innerLoopKeyBlock is False:
+                        for item in KEYS:
+                            keyboard.remap_key(item, 'space')
+                            print(" [!] Blocked {} key!".format(item.upper()))
+                        innerLoopKeyBlock = True
+        keyboard.unhook_all()
+        innerLoopKeyBlock = False
 
         mainLoop_start_time = time.time()
