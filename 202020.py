@@ -13,7 +13,7 @@ speech_engine = pyttsx3.init()
 speech_engine.setProperty("rate", 200)
 mainLoop_start_time = time.time()
 
-print(" [+] The  tool has been started. Don't disturb this window now!")
+print(" [+] The  tool has been started. Don't give up!")
 
 while True:
     mainLoop_while_time = time.time()
@@ -32,7 +32,7 @@ while True:
 
         while True:
             innerLoopTime_2 = time.time()
-            if round(innerLoopTime_2, 1) - round(innerLoopTime) == 8:
+            if round(innerLoopTime_2, 1) - round(innerLoopTime) == 20:
                 print(" [+] 20 seconds has passed!")
                 playsound.playsound("success.mp3")
                 speech_engine.say("20 seconds has passed. Good job.")
@@ -48,9 +48,10 @@ while True:
                     if innerLoopKeyBlock is False:
                         for item in KEYS:
                             keyboard.remap_key(item, 'space')
-                            print(" [!] Blocked {} key!".format(item.upper()))
                         innerLoopKeyBlock = True
+                        print(" [!] Blocked all keyboard and mouse entry!")
         keyboard.unhook_all()
+        print(" [+] Restored keyboard and mouse entry!"+("\n"*10))
         innerLoopKeyBlock = False
 
         mainLoop_start_time = time.time()
