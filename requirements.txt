@@ -1,0 +1,6 @@
+keyboard
+win10toast
+configparser
+logging
+mouse
+time
