@@ -6,49 +6,64 @@ A fork of https://github.com/Elliot-Potts/20-20-20.git
 
 '''
 import time, configparser, logging,random
-import pyHook,pythoncom
+import mouse,keyboard
 from win10toast import ToastNotifier
 
 def main():
     #global vars
     path_ini = "202020.ini"
     path_log = "202020.log"
-    time_work_s = 10#20*60
-    time_break_s = 8#25
-    icon = ""
-    messages_break = ["You have worked for 20 minutes straight. Please look at something 20 feet away for 20 seconds.","It's that time again to look away from the screen for 20 seconds.","Do your eyes a favor and look at something 20 feet away.","To prevent eye strain, please give your eyes a 20 second break.","Good work! Remember to blink and look away from the computer for a while.","Remember the 20-20-20 rule.","Take that well-deserved 20 second break."]
+    time_work_s = 60#20*60
+    time_break_s = 5#25
+    time_idle_s = 5#5*60
+    icon = "icon.png"
+    messages_break = ["You have worked for 20 minutes straight. Please look at something 20 feet away for 20 seconds.",
+    "It's that time again to look away from the screen for 20 seconds.",
+    "Do your eyes a favor and look at something 20 feet away.",
+    "To prevent eye strain, please give your eyes a 20 second break.",
+    "Good work! Remember to blink and look away from the computer for a while.",
+    "Remember the 20-20-20 rule.","Take that well-deserved 20 second break."]
     messages_resume = ["Back to work!","Thank you for taking care of your eyes.","You may resume.","20 seconds has passed. Good job.","You're doing great! Time to get back to work."]
 
     #setup
-    hm = pyHook.HookManager()
     toaster = ToastNotifier()
     config = configparser.ConfigParser()
     logging.basicConfig(filename=path_log,filemode='a',
                                 format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                                datefmt='%H:%M:%S',
+                                datefmt='%c',
                                 level=logging.DEBUG)
 
 
     #start
-    logging.info("20-20-20 Start")
+    logging.info("202020 Start")
+    timer_work_start = time.time()
+    timer_last_active = time.time()
+    def activityRefresh(e): 
+        global timer_last_active
+        timer_last_active = time.time()
+    mouse.hook(activityRefresh)
+    
     while True:
-        timer_work_start = time.time()
         timer_work_while = time.time()
+        
+        #if we have been idle for greater than threshold, keep starting timer in sync with while timer 
+        if(timer_work_while - timer_last_active) >= time_idle_s:
+            timer_work_start = time.time()
+            time.sleep(0.1)
+            print(("%s - %s") % (timer_work_while,timer_last_active))
+
         if timer_work_while - timer_work_start >= time_work_s:
             logging.info("Break Start")
-            toaster.show_toast(random.choice(messages_break),icon_path=icon,duration=10)
+            toaster.show_toast("202020",random.choice(messages_break),icon_path=icon,duration=10,threaded=True)
             #read from config every time        
             config.read(path_ini)
 
             #if intrusive == True: also block input
-            intrusive = config['DEFAULT']['intrusive'] or False
+            intrusive = config['DEFAULT']['intrusive'] if ('intrusive' in config['DEFAULT'])  else  False
             logging.info(("intrusive=%s") % intrusive)
             if (intrusive):
-                hm.MouseAll = block
-                hm.KeyAll = block
-                hm.HookMouse()
-                hm.HookKeyboard()
-                pythoncom.PumpMessages()
+                mouse.hook(mouseblock)
+                keyboard.hook(keyboardblock, True)
                 logging.info("Input Blocked.")
             timer_break_start = time.time()
             timer_break_while = time.time()
@@ -56,21 +71,19 @@ def main():
                 timer_break_while = time.time()
                 
             if (intrusive):
-                hm.MouseAll = unblock
-                hm.KeyAll = unblock
-                hm.HookMouse()
-                hm.HookKeyboard()
-                pythoncom.PumpMessages()
+                mouse.unhook(mouseblock)
+                keyboard.unhook(keyboardblock)
                 logging.info("Input Unblocked.")
             
             logging.info("Break End")
-            toaster.show_toast(random.choice(messages_resume),icon_path=icon,duration=20)
+            toaster.show_toast("202020",random.choice(messages_resume),icon_path=icon,duration=20,threaded=True)
             timer_work_start = time.time()
 
-def block(e):
-    return False
+def mouseblock(e):
+    mouse.move(5,5,True)
 
-def unblock(e):
-    return True
+def keyboardblock(e):
+    pass
+
 
 if __name__ == '__main__': main()

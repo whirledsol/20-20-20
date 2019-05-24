@@ -1,4 +1,4 @@
-pyHook
-pythoncom
+mouse
+keyboard
 win10toast
 
